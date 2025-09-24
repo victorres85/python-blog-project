@@ -8,3 +8,5 @@ __pycache__
 app.log
 uv.lock
 tasks/
+htmlcov/
+.coverage
