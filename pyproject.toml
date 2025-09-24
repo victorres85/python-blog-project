@@ -4,4 +4,86 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "fastapi>=0.117.1",
+    "httpx>=0.28.1",
+    "pydantic>=2.0,<3.0",
+    "pydantic-settings>=2.10.1",
+    "pytest-asyncio>=1.2.0",
+    "sqlalchemy>=2.0",
+    "uvicorn>=0.36.0",
+]
+
+[dependency-groups]
+dev = [
+    "black>=25.9.0",
+    "isort>=6.0.1",
+    "mypy>=1.18.2",
+    "pytest>=8.4.2",
+    "pytest-asyncio>=0.24.0",
+    "pytest-cov>=5.0.0",
+]
+
+
+# Tool configurations below
+[tool.black]
+line-length = 120
+
+[tool.mypy]
+strict = true
+check_untyped_defs = true
+disallow_untyped_decorators = false
+exclude = ["\\.venv"]  # regex requires escaping backslashes for .
+plugins = "sqlalchemy.ext.mypy.plugin"
+ignore_missing_imports = true
+mypy_path = ["."]
+
+[tool.flake8]
+max-line-length = 120
+ignore = ["E203"]
+exclude = [".venv", ".git"]
+
+[tool.isort]
+profile = "black"
+filter_files = true
+
+
+[tool.pytest.ini_options]
+markers = [
+    "integration: mark integration tests",
+    "asyncio: mark asyncio tests",
+]
+pythonpath = ["."]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+
+
+[tool.coverage.run]
+source = ["app"]
+branch = true
+omit = [
+    "*/tests/*",
+    "*/venv/*",
+    "*/.venv/*",
+    "*/migrations/*",
+    "*/__pycache__/*",
+    "*/.pytest_cache/*",
+    "*/.git/*",
+    "**/exceptions.py",
+    "**/__init__.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+]
+show_missing = true
+precision = 2
+fail_under = 80
+
+[tool.coverage.html]
+directory = "htmlcov"
+title = "Blog API Coverage Report"
+show_contexts = true
